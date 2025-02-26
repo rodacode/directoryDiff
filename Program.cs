@@ -52,48 +52,48 @@ namespace DirectoryDiff
             DisplayResults(result, directory1, directory2);
         }
 
-        static void DisplayResults(ComparisonResult result, string directory1, string directory2)
+static void DisplayResults(ComparisonResult result, string directory1, string directory2)
+{
+    Console.WriteLine($"\nComparison between:");
+    Console.WriteLine($"  1: {directory1}");
+    Console.WriteLine($"  2: {directory2}");
+    Console.WriteLine($"\nResults summary:");
+    Console.WriteLine($"  Files only in directory 1: {result.OnlyInFirst.Count}");
+    Console.WriteLine($"  Files only in directory 2: {result.OnlyInSecond.Count}");
+    Console.WriteLine($"  Files with differences: {result.Different.Count}");
+    Console.WriteLine($"  Identical files: {result.Identical.Count}");
+
+    // Display files only in first directory
+    if (result.OnlyInFirst.Count > 0)
+    {
+        Console.WriteLine($"\nFiles only in directory 1:");
+        foreach (var file in result.OnlyInFirst.OrderBy(f => f))
         {
-            Console.WriteLine($"\nComparison between:");
-            Console.WriteLine($"  1: {directory1}");
-            Console.WriteLine($"  2: {directory2}");
-            Console.WriteLine($"\nResults summary:");
-            Console.WriteLine($"  Files only in directory 1: {result.OnlyInFirst.Count}");
-            Console.WriteLine($"  Files only in directory 2: {result.OnlyInSecond.Count}");
-            Console.WriteLine($"  Files with differences: {result.Different.Count}");
-            Console.WriteLine($"  Identical files: {result.Identical.Count}");
-
-            // Display files only in first directory
-            if (result.OnlyInFirst.Count > 0)
-            {
-                Console.WriteLine($"\nFiles only in directory 1:");
-                foreach (var file in result.OnlyInFirst)
-                {
-                    Console.WriteLine($"  {file}");
-                }
-            }
-
-            // Display files only in second directory
-            if (result.OnlyInSecond.Count > 0)
-            {
-                Console.WriteLine($"\nFiles only in directory 2:");
-                foreach (var file in result.OnlyInSecond)
-                {
-                    Console.WriteLine($"  {file}");
-                }
-            }
-
-            // Display different files
-            if (result.Different.Count > 0)
-            {
-                Console.WriteLine($"\nFiles that differ:");
-                foreach (var diff in result.Different)
-                {
-                    Console.WriteLine($"  {diff.FileName}");
-                    Console.WriteLine($"    Size: {diff.Size1} vs {diff.Size2} bytes");
-                    Console.WriteLine($"    Modified: {diff.Modified1} vs {diff.Modified2}");
-                }
-            }
+            Console.WriteLine($"  {file}");
         }
+    }
+
+    // Display files only in second directory
+    if (result.OnlyInSecond.Count > 0)
+    {
+        Console.WriteLine($"\nFiles only in directory 2:");
+        foreach (var file in result.OnlyInSecond.OrderBy(f => f))
+        {
+            Console.WriteLine($"  {file}");
+        }
+    }
+
+    // Display different files
+    if (result.Different.Count > 0)
+    {
+        Console.WriteLine($"\nFiles that differ:");
+        foreach (var diff in result.Different.OrderBy(d => d.FileName))
+        {
+            Console.WriteLine($"  {diff.FileName}");
+            Console.WriteLine($"    Size: {diff.Size1} vs {diff.Size2} bytes");
+            Console.WriteLine($"    Modified: {diff.Modified1.ToLocalTime()} vs {diff.Modified2.ToLocalTime()}");
+        }
+    }
+}
     }
 }
