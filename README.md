@@ -63,7 +63,7 @@ The tool compares directories using the following process:
 
 ## Roadmap
 
-- [ ] Add recursive directory comparison
+- [x] Add recursive directory comparison
 - [ ] Implement file content comparison for text files
 - [ ] Add file pattern ignore options (e.g., ignore .git folder)
 - [ ] Create a GUI interface with Avalonia UI
