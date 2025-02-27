@@ -13,24 +13,30 @@ namespace DirectoryDiff
 
             if (args.Length < 2)
             {
-                Console.WriteLine("Usage: DirectoryDiff <directory1> <directory2>");
-                Console.WriteLine("Example: DirectoryDiff /Users/me/folder1 /Users/me/folder2");
-
-                // For testing, you can uncomment these lines to use hardcoded paths
-                // string directory1 = "/path/to/directory1";
-                // string directory2 = "/path/to/directory2";
-                // RunComparison(directory1, directory2);
-
+                Console.WriteLine("Two paths of directories need to be pass in the args");
+                Console.WriteLine("Usage: DirectoryDiff <directory1> <directory2> [options]");
+                Console.WriteLine("Example: DirectoryDiff /Users/me/folder1 /Users/me/folder2 --content");
+                Console.WriteLine("\nOptions:");
+                Console.WriteLine("  --content    Compare file contents (slower but more accurate)");
                 return;
             }
 
             string directory1 = args[0];
             string directory2 = args[1];
 
-            RunComparison(directory1, directory2);
+            // Check for content comparison flag
+            bool compareContent = args.Length > 2 && args.Contains("--content");
+
+            if (compareContent)
+            {
+                Console.WriteLine("Content comparison enabled (this may take longer)");
+            }
+
+            RunComparison(directory1, directory2, compareContent);
         }
 
-        static void RunComparison(string directory1, string directory2)
+
+        static void RunComparison(string directory1, string directory2, bool compareContent)
         {
             // Validate directories
             if (!Directory.Exists(directory1))
@@ -45,15 +51,15 @@ namespace DirectoryDiff
                 return;
             }
 
-            // Create a directory comparer and run the comparison
-            var comparer = new DirectoryComparer();
+            // Create a directory comparer with the content comparison option
+            var comparer = new DirectoryComparer(compareContent);
             var result = comparer.CompareDirectories(directory1, directory2);
 
             // Display the results
-            DisplayResults(result, directory1, directory2);
+            DisplayResults(result, directory1, directory2, compareContent);
         }
 
-        static void DisplayResults(ComparisonResult result, string directory1, string directory2)
+        static void DisplayResults(ComparisonResult result, string directory1, string directory2, bool contentCompared)
         {
             Console.WriteLine($"\nComparison between:");
             Console.WriteLine($"  1: {directory1}");
@@ -99,8 +105,21 @@ namespace DirectoryDiff
                 foreach (var diff in result.Different.OrderBy(d => d.FileName))
                 {
                     Console.WriteLine($"  {diff.FileName}");
-                    Console.WriteLine($"    Size: {diff.Size1} vs {diff.Size2} bytes");
-                    Console.WriteLine($"    Modified: {diff.Modified1.ToLocalTime()} vs {diff.Modified2.ToLocalTime()}");
+
+                    if (diff.Size1 != diff.Size2)
+                    {
+                        Console.WriteLine($"    Size: {diff.Size1} vs {diff.Size2} bytes");
+                    }
+
+                    if (diff.Modified1 != diff.Modified2)
+                    {
+                        Console.WriteLine($"    Modified: {diff.Modified1.ToLocalTime()} vs {diff.Modified2.ToLocalTime()}");
+                    }
+
+                    if (contentCompared && diff.Size1 == diff.Size2)
+                    {
+                        Console.WriteLine($"    Content: {(diff.ContentSame ? "Same" : "Different")}");
+                    }
                 }
             }
 

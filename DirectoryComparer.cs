@@ -7,15 +7,20 @@ namespace DirectoryDiff
 {
     public class DirectoryComparer
     {
-        private readonly FileComparer _fileComparer = new FileComparer();
+        private readonly FileComparer _fileComparer;
 
+        public DirectoryComparer(bool compareContent = false)
+        {
+            _fileComparer = new FileComparer(compareContent);
+        }
+        
         public ComparisonResult CompareDirectories(string directory1, string directory2)
         {
             var result = new ComparisonResult();
-            
+
             // Perform recursive comparison
             CompareDirectoriesRecursive(directory1, directory2, "", result);
-            
+
             return result;
         }
 

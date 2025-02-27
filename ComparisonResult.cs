@@ -18,5 +18,6 @@ namespace DirectoryDiff
         public long Size2 { get; set; }
         public DateTime Modified1 { get; set; }
         public DateTime Modified2 { get; set; }
+        public bool ContentSame { get; set; }
     }
 }
