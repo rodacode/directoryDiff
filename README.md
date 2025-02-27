@@ -64,7 +64,7 @@ The tool compares directories using the following process:
 ## Roadmap
 
 - [x] Add recursive directory comparison
-- [ ] Implement file content comparison for text files
+- [x] Implement file content comparison for text files
 - [ ] Add file pattern ignore options (e.g., ignore .git folder)
 - [ ] Create a GUI interface with Avalonia UI
 - [ ] Add comparison report export options (HTML, JSON)
