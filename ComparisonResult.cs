@@ -13,11 +13,12 @@ namespace DirectoryDiff
 
     public class FileDifference
     {
-        public string FileName { get; set; }
+        public required string FileName { get; set; }
         public long Size1 { get; set; }
         public long Size2 { get; set; }
         public DateTime Modified1 { get; set; }
         public DateTime Modified2 { get; set; }
         public bool ContentSame { get; set; }
     }
+
 }
